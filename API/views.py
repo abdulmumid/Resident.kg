@@ -13,11 +13,27 @@ class PopularAPIView(APIView):
         return Response(serializer.data)
 
 
+#Категория-Недвижимость
+class CategoryRealEstateAPIView(APIView):
+    def get(self, request):
+        queryset = Category_Real_Estate.objects.all().order_by('-id')
+        serializer = CategoryLuxuryHolidaySerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
 # Недвижимость
 class RealEstateAPIView(APIView):
     def get(self, request):
         queryset = Real_Estate.objects.all().order_by('-id')
         serializer = RealEstateSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+#Категория-Росскошный оддых
+class CategoryLuxuryHolidayAPIView(APIView):
+    def get(self, request):
+        queryset = Category_Luxury_Holiday.objects.all().order_by('-id')
+        serializer = CategoryLuxuryHolidaySerializer(queryset, many=True)
         return Response(serializer.data)
 
 

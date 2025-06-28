@@ -14,7 +14,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'yourdomain.com']  
+ALLOWED_HOSTS = ["*"]  
 
 INSTALLED_APPS = [
     'jazzmin',
@@ -118,7 +118,9 @@ JAZZMIN_SETTINGS = {
     "navigation_expanded": True,
     "icons": {
         "API.Popular": "fas fa-fire",
+        "API.Category_Real_Estate": "fas fa-home",
         "API.Real_Estate": "fas fa-home",
+        "API.Category_Luxury_Holiday": "fas fa-umbrella-beach",
         "API.Luxury_Holiday": "fas fa-umbrella-beach",
         "API.Interview": "fas fa-microphone",
         "API.Product": "fas fa-box",

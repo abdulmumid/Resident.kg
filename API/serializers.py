@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import (
-    Popular, Real_Estate, Luxury_Holiday, Interview,
+    Popular, Category_Real_Estate, Real_Estate, Category_Luxury_Holiday, Luxury_Holiday, Interview,
     Product, CompanyOffer, Article, Review, About,
     About_Company, Advantage, ContactInfo
 )
@@ -11,9 +11,21 @@ class PopularSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class CategoryRealEstate(serializers.ModelSerializer):
+    class Meta:
+        model = Category_Real_Estate
+        fields = '__all__'
+
+
 class RealEstateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Real_Estate
+        fields = '__all__'
+
+
+class CategoryLuxuryHolidaySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category_Luxury_Holiday
         fields = '__all__'
 
 

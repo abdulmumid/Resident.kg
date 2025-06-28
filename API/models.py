@@ -15,8 +15,23 @@ class Popular(models.Model):
         ordering = ['-id']  
 
 
+#Категория-Недвижимость
+class Category_Real_Estate(models.Model):
+    category = models.CharField(('Категория'), max_length=20)
+    created_at = models.DateTimeField(('Дата создания'), auto_now_add=True)
+
+    def __str__(self):
+        return self.category
+    
+    class Meta:
+        verbose_name = 'Категория-Недвижомость'
+        verbose_name_plural = 'Категории-Недвижимостей'
+        ordering = ['-id']
+
+
 # Недвижимость
 class Real_Estate(models.Model):
+    category = models.ForeignKey(Category_Real_Estate, on_delete=models.CASCADE, related_name='Real_Estate', verbose_name='Категория')
     image = models.ImageField(('Изображение'), upload_to='real_estate_images/')
     title = models.CharField(('Название'), max_length=255)
     text = models.TextField(('Текст'), blank=True, null=True)
@@ -32,8 +47,23 @@ class Real_Estate(models.Model):
         ordering = ['-id']  
 
 
+#Категория-Росскошный одддых
+class Category_Luxury_Holiday(models.Model):
+    category = models.CharField(('Категория'), max_length=20)
+    created_at = models.DateTimeField(('Дата создания'), auto_now_add=True)
+
+    def __str__(self):
+        return self.category
+    
+    class Meta:
+        verbose_name = 'Категория-Росскошный оддых'
+        verbose_name_plural = 'Категории-Росскошных оддыхов'
+        ordering = ['-id']
+
+
 # Роскошный отдых
 class Luxury_Holiday(models.Model):
+    category = models.ForeignKey(Category_Luxury_Holiday, on_delete=models.CASCADE, related_name='luxury_holidays', verbose_name='Категория')
     image = models.ImageField(('Изображение'), upload_to='luxury_holiday_images/')
     title = models.CharField(('Заголовок'), max_length=255)
     created_at = models.DateTimeField(('Дата создания'), auto_now_add=True)
@@ -189,6 +219,7 @@ class ContactInfo(models.Model):
     facebook_link = models.URLField('Facebook', blank=True)
     instagram_link = models.URLField('Instagram', blank=True)
     tiktok_link = models.URLField('TikTok', blank=True)
+    image = models.ImageField(('Изображение'), upload_to='ContactInfo_images/')
     created_at = models.DateTimeField('Дата создания', auto_now_add=True)
 
     def __str__(self):
