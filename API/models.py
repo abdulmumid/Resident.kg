@@ -3,6 +3,9 @@ from django.db import models
 
 # Популярные изображения
 class Popular(models.Model):
+    title = models.CharField(('Заголовок'), max_length=30)
+    text = models.TextField(('Текст'))
+    url = models.URLField(('URL'), blank=True)
     image = models.ImageField(('Изображение'), upload_to='popular_images/')
     created_at = models.DateTimeField(('Дата создания'), auto_now_add=True)
 

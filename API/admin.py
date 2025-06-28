@@ -13,7 +13,7 @@ image_preview.short_description = 'Изображение'
 @admin.register(Popular)
 class PopularAdmin(admin.ModelAdmin):
     icon_name = "fire"  # 🔥 Популярное
-    list_display = ('id', 'image_preview', 'created_at')
+    list_display = ('id', 'title', 'url', 'image_preview', 'created_at')
     # readonly_fields = ('image_preview',)
     def image_preview(self, obj): return image_preview(obj)
 
