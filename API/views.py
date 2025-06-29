@@ -13,26 +13,26 @@ class PopularAPIView(APIView):
         return Response(serializer.data)
 
 
-#Категория-Недвижимость
+# Категория - Недвижимость
 class CategoryRealEstateAPIView(APIView):
     def get(self, request):
-        queryset = Category_Real_Estate.objects.all().order_by('-id')
-        serializer = CategoryLuxuryHolidaySerializer(queryset, many=True)
+        queryset = CategoryRealEstate.objects.all().order_by('-id')
+        serializer = CategoryRealEstateSerializer(queryset, many=True)
         return Response(serializer.data)
 
 
 # Недвижимость
 class RealEstateAPIView(APIView):
     def get(self, request):
-        queryset = Real_Estate.objects.all().order_by('-id')
+        queryset = RealEstate.objects.all().order_by('-id')
         serializer = RealEstateSerializer(queryset, many=True)
         return Response(serializer.data)
 
 
-#Категория-Росскошный оддых
+# Категория - Роскошный отдых
 class CategoryLuxuryHolidayAPIView(APIView):
     def get(self, request):
-        queryset = Category_Luxury_Holiday.objects.all().order_by('-id')
+        queryset = CategoryLuxuryHoliday.objects.all().order_by('-id')
         serializer = CategoryLuxuryHolidaySerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -40,7 +40,7 @@ class CategoryLuxuryHolidayAPIView(APIView):
 # Роскошный отдых
 class LuxuryHolidayAPIView(APIView):
     def get(self, request):
-        queryset = Luxury_Holiday.objects.all().order_by('-id')
+        queryset = LuxuryHoliday.objects.all().order_by('-id')
         serializer = LuxuryHolidaySerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -77,7 +77,7 @@ class ArticleAPIView(APIView):
         return Response(serializer.data)
 
 
-# Отзывы
+# Отзывы (POST только)
 class ReviewAPIView(APIView):
     def post(self, request):
         serializer = ReviewSerializer(data=request.data)
@@ -98,7 +98,7 @@ class AboutAPIView(APIView):
 # О компании
 class AboutCompanyAPIView(APIView):
     def get(self, request):
-        queryset = About_Company.objects.all().order_by('-id')
+        queryset = AboutCompany.objects.all().order_by('-id')
         serializer = AboutCompanySerializer(queryset, many=True)
         return Response(serializer.data)
 

@@ -1,216 +1,253 @@
 from django.db import models
+from django.template.defaultfilters import slugify
+from ckeditor_uploader.fields import RichTextUploadingField
+from navis.choices import LANGUAGE_CHOICES
 
 
-# Популярные изображения
 class Popular(models.Model):
-    title = models.CharField(('Заголовок'), max_length=30)
-    text = models.TextField(('Текст'))
-    url = models.URLField(('URL'), blank=True)
-    image = models.ImageField(('Изображение'), upload_to='popular_images/')
-    created_at = models.DateTimeField(('Дата создания'), auto_now_add=True)
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    title = models.CharField('Заголовок', max_length=30)
+    text = RichTextUploadingField('Текст')
+    url = models.URLField('URL', blank=True)
+    image = models.ImageField('Изображение', upload_to='popular_images/')
+    slug = models.SlugField('Слаг', max_length=255, unique=True, null=True, blank=True)
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('Дата обновления', auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Popular Image {self.id}"
-    
+        return self.title
+
     class Meta:
         verbose_name = 'Популярное'
         verbose_name_plural = 'Популярные'
-        ordering = ['-id']  
+        ordering = ['-created_at']
 
 
-#Категория-Недвижимость
-class Category_Real_Estate(models.Model):
-    category = models.CharField(('Категория'), max_length=20)
-    created_at = models.DateTimeField(('Дата создания'), auto_now_add=True)
+class CategoryRealEstate(models.Model):
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    category = models.CharField('Категория', max_length=50)
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
 
     def __str__(self):
         return self.category
-    
+
     class Meta:
-        verbose_name = 'Категория-Недвижомость'
-        verbose_name_plural = 'Категории-Недвижимостей'
-        ordering = ['-id']
+        verbose_name = 'Категория - Недвижимость'
+        verbose_name_plural = 'Категории - Недвижимость'
+        ordering = ['-created_at']
 
 
-# Недвижимость
-class Real_Estate(models.Model):
-    category = models.ForeignKey(Category_Real_Estate, on_delete=models.CASCADE, related_name='Real_Estate', verbose_name='Категория')
-    image = models.ImageField(('Изображение'), upload_to='real_estate_images/')
-    title = models.CharField(('Название'), max_length=255)
-    text = models.TextField(('Текст'), blank=True, null=True)
-    time = models.DateTimeField(('Время'), auto_now_add=True)
-    created_at = models.DateTimeField(('Дата создания'), auto_now_add=True)
+class RealEstate(models.Model):
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    category = models.ForeignKey(CategoryRealEstate, on_delete=models.CASCADE, related_name='real_estates', verbose_name='Категория')
+    image = models.ImageField('Изображение', upload_to='real_estate_images/')
+    title = models.CharField('Название', max_length=255)
+    text = RichTextUploadingField('Текст', blank=True, null=True)
+    slug = models.SlugField('Слаг', max_length=255, unique=True, null=True, blank=True)
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('Дата обновления', auto_now=True)
 
     def __str__(self):
-        return f"Real Estate Image {self.id}"
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Недвижимость'
-        verbose_name_plural = 'Недвижимости'
-        ordering = ['-id']  
+        verbose_name_plural = 'Недвижимость'
+        ordering = ['-created_at']
 
 
-#Категория-Росскошный одддых
-class Category_Luxury_Holiday(models.Model):
-    category = models.CharField(('Категория'), max_length=20)
-    created_at = models.DateTimeField(('Дата создания'), auto_now_add=True)
+class CategoryLuxuryHoliday(models.Model):
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    category = models.CharField('Категория', max_length=50)
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
 
     def __str__(self):
         return self.category
-    
+
     class Meta:
-        verbose_name = 'Категория-Росскошный оддых'
-        verbose_name_plural = 'Категории-Росскошных оддыхов'
-        ordering = ['-id']
+        verbose_name = 'Категория - Роскошный отдых'
+        verbose_name_plural = 'Категории - Роскошного отдыха'
+        ordering = ['-created_at']
 
 
-# Роскошный отдых
-class Luxury_Holiday(models.Model):
-    category = models.ForeignKey(Category_Luxury_Holiday, on_delete=models.CASCADE, related_name='luxury_holidays', verbose_name='Категория')
-    image = models.ImageField(('Изображение'), upload_to='luxury_holiday_images/')
-    title = models.CharField(('Заголовок'), max_length=255)
-    created_at = models.DateTimeField(('Дата создания'), auto_now_add=True)
+class LuxuryHoliday(models.Model):
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    category = models.ForeignKey(CategoryLuxuryHoliday, on_delete=models.CASCADE, related_name='luxury_holidays', verbose_name='Категория')
+    image = models.ImageField('Изображение', upload_to='luxury_holiday_images/')
+    title = models.CharField('Заголовок', max_length=255)
+    slug = models.SlugField('Слаг', max_length=255, unique=True, null=True, blank=True)
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('Дата обновления', auto_now=True)
 
     def __str__(self):
-        return f"Luxury Holiday Image {self.id}"
-    
+        return self.title
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Роскошный отдых'
-        verbose_name_plural = 'Роскошные отдыхи'
-        ordering = ['-id']  
+        verbose_name_plural = 'Роскошный отдых'
+        ordering = ['-created_at']
 
 
-# Интервью
 class Interview(models.Model):
-    title = models.CharField(('Заголовок'), max_length=255)
-    autor = models.CharField(('Автор'), max_length=255)
-    studio = models.CharField(('Студия'), max_length=255)
-    created_at = models.DateTimeField(('Дата создания'), auto_now_add=True)
-    image = models.ImageField(('Изображение'), upload_to='interview_images/')
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    title = models.CharField('Заголовок', max_length=255)
+    author = models.CharField('Автор', max_length=255)
+    studio = models.CharField('Студия', max_length=255)
+    image = models.ImageField('Изображение', upload_to='interview_images/')
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('Дата обновления', auto_now=True)
 
     def __str__(self):
-        return f"Interview {self.title} by {self.autor}"
-    
+        return self.title
+
     class Meta:
         verbose_name = 'Интервью'
         verbose_name_plural = 'Интервью'
-        ordering = ['-created_at'] 
+        ordering = ['-created_at']
 
 
-# Продукты
 class Product(models.Model):
-    title = models.CharField(('Заголовок'), max_length=255)
-    text = models.TextField(('Текст'))
-    image = models.ImageField(('Изображение'), upload_to='Product_images/')
-    created_at = models.DateTimeField(('Дата создания'), auto_now_add=True)
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    title = models.CharField('Заголовок', max_length=255)
+    text = RichTextUploadingField('Текст')
+    image = models.ImageField('Изображение', upload_to='product_images/')
+    slug = models.SlugField('Слаг', max_length=255, unique=True, null=True, blank=True)
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('Дата обновления', auto_now=True)
 
     def __str__(self):
         return self.title
-    
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
-        ordering = ['-id']  
+        ordering = ['-created_at']
 
 
-# Предложения от компании
 class CompanyOffer(models.Model):
-    title = models.CharField(('Заголовок'), max_length=255)
-    image = models.ImageField(('Изображение'), upload_to='CompanyOffer_images/')
-    url = models.URLField(('URL'), blank=True, null=True)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(('Дата создания'), auto_now_add=True)
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    title = models.CharField('Заголовок', max_length=255)
+    image = models.ImageField('Изображение', upload_to='company_offer_images/')
+    url = models.URLField('URL', blank=True, null=True)
+    is_active = models.BooleanField('Активен', default=True)
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('Дата обновления', auto_now=True)
 
     def __str__(self):
         return self.title
-    
+
     class Meta:
         verbose_name = 'Предложение от компании'
         verbose_name_plural = 'Предложения от компании'
-        ordering = ['-id']  
+        ordering = ['-created_at']
 
 
-# Статьи
 class Article(models.Model):
-    title = models.CharField(('Заголовок'), max_length=255)
-    text = models.TextField(('Текст'))
-    image = models.ImageField(('Изображение'), upload_to='Article_images/')
-    created_at = models.DateTimeField(('Дата создания'), auto_now_add=True)
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    title = models.CharField('Заголовок', max_length=255)
+    text = RichTextUploadingField('Текст')
+    image = models.ImageField('Изображение', upload_to='article_images/')
+    slug = models.SlugField('Слаг', max_length=255, unique=True, null=True, blank=True)
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
+    updated_at = models.DateTimeField('Дата обновления', auto_now=True)
 
     def __str__(self):
         return self.title
-    
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
     class Meta:
         verbose_name = 'Статья'
         verbose_name_plural = 'Статьи'
-        ordering = ['-id']  
+        ordering = ['-created_at']
 
 
-# Отзывы
 class Review(models.Model):
-    name = models.CharField(('Имя'), max_length=30)
-    review = models.TextField(('Отзыв'))
-    object_id = models.IntegerField()
-    created_at = models.DateTimeField(('Дата создания'), auto_now_add=True)
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    name = models.CharField('Имя', max_length=30)
+    review = RichTextUploadingField('Отзыв')
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
 
     def __str__(self):
         return self.name
-    
+
     class Meta:
         verbose_name = 'Отзыв'
         verbose_name_plural = 'Отзывы'
-        ordering = ['-id']  
+        ordering = ['-created_at']
 
 
-# Блок "О нас"
 class About(models.Model):
-    title = models.CharField(('Заголовок'), max_length=255)
-    image = models.ImageField(('Изображение'), upload_to='About_images/')
-    created_at = models.DateTimeField(('Дата создания'), auto_now_add=True)
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    title = models.CharField('Заголовок', max_length=255)
+    image = models.ImageField('Изображение', upload_to='about_images/')
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
 
     def __str__(self):
         return self.title
-    
+
     class Meta:
         verbose_name = 'О нас'
         verbose_name_plural = 'О нас'
-        ordering = ['-id']  
+        ordering = ['-created_at']
 
 
-# О компании
-class About_Company(models.Model):
-    text = models.TextField(('О Компании'))
-    image = models.ImageField(('Изображение'), upload_to='AboutCompany_images/')
-    created_at = models.DateTimeField(('Дата создания'), auto_now_add=True)
+class AboutCompany(models.Model):
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    text = RichTextUploadingField('О Компании')
+    image = models.ImageField('Изображение', upload_to='about_company_images/')
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
 
     def __str__(self):
         return self.text[:50] + '...'
-    
+
     class Meta:
-        verbose_name = 'О Компании'
-        verbose_name_plural = 'О Компании'
-        ordering = ['-id']  
+        verbose_name = 'О компании'
+        verbose_name_plural = 'О компании'
+        ordering = ['-created_at']
 
 
-# Преимущества
 class Advantage(models.Model):
-    title = models.CharField(('Заголовок'), max_length=255)
-    icon = models.ImageField(('Изображение'), upload_to='Advantage_images/', blank=True, null=True)
-    order = models.PositiveIntegerField(('Сортировка'), default=0)
-    created_at = models.DateTimeField(('Дата создания'), auto_now_add=True)
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    title = models.CharField('Заголовок', max_length=255)
+    icon = models.ImageField('Иконка', upload_to='advantage_icons/', blank=True, null=True)
+    order = models.PositiveIntegerField('Порядок', default=0)
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
 
     def __str__(self):
         return self.title
-    
+
     class Meta:
-        verbose_name = 'Преимущества'
+        verbose_name = 'Преимущество'
         verbose_name_plural = 'Преимущества'
         ordering = ['order', '-created_at']
 
 
-
-# Контактная информация
 class ContactInfo(models.Model):
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
     address = models.CharField('Адрес', max_length=255)
     work_time = models.CharField('Время работы', max_length=100)
     journal_email = models.EmailField('Email (Журнал)')
@@ -222,13 +259,13 @@ class ContactInfo(models.Model):
     facebook_link = models.URLField('Facebook', blank=True)
     instagram_link = models.URLField('Instagram', blank=True)
     tiktok_link = models.URLField('TikTok', blank=True)
-    image = models.ImageField(('Изображение'), upload_to='ContactInfo_images/')
+    image = models.ImageField('Изображение', upload_to='contact_info_images/')
     created_at = models.DateTimeField('Дата создания', auto_now_add=True)
 
     def __str__(self):
         return "Контактная информация"
 
     class Meta:
-        verbose_name = "Контактная информация"
-        verbose_name_plural = "Контактная информация"
-        ordering = ['-id']
+        verbose_name = 'Контактная информация'
+        verbose_name_plural = 'Контактная информация'
+        ordering = ['-created_at']
