@@ -41,7 +41,8 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('API.urls')),  # Все API эндпоинты будут начинаться с /api/
+    path('ckeditor/', include('ckeditor_uploader.urls')), 
+    path('api/', include('API.urls')),  
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='redoc'),
 ]

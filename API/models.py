@@ -1,7 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from ckeditor_uploader.fields import RichTextUploadingField
-from navis.choices import LANGUAGE_CHOICES
+from API.choices import LANGUAGE_CHOICES
 
 
 class Popular(models.Model):
@@ -29,7 +29,6 @@ class Popular(models.Model):
 
 
 class CategoryRealEstate(models.Model):
-    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
     category = models.CharField('Категория', max_length=50)
     created_at = models.DateTimeField('Дата создания', auto_now_add=True)
 
@@ -67,7 +66,6 @@ class RealEstate(models.Model):
 
 
 class CategoryLuxuryHoliday(models.Model):
-    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
     category = models.CharField('Категория', max_length=50)
     created_at = models.DateTimeField('Дата создания', auto_now_add=True)
 

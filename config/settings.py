@@ -27,6 +27,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'corsheaders',
+    'ckeditor',
+    'ckeditor_uploader',
     'API',
 ]
 
@@ -86,12 +88,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LANGUAGE_CODE = 'en'
-
-LANGUAGES = [
-    ('en', 'English'),
-    ('ru', 'Russia')
-]
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'Asia/Bishkek'
 
@@ -110,6 +107,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
