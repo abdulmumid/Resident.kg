@@ -1,22 +1,21 @@
-# Импорт необходимых модулей
 from django.db import models
 from django.template.defaultfilters import slugify
 from ckeditor_uploader.fields import RichTextUploadingField
-from API.choices import LANGUAGE_CHOICES  # Предполагается, что это список кортежей с языками
+from API.choices import LANGUAGE_CHOICES  
 
 # Модель для популярного контента
 class Popular(models.Model):
-    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)  # Язык контента
-    title = models.CharField('Заголовок', max_length=30)  # Заголовок
-    text = RichTextUploadingField('Текст')  # Основной текст с CKEditor
-    url = models.URLField('URL', blank=True)  # Ссылка, необязательная
-    image = models.ImageField('Изображение', upload_to='popular_images/')  # Изображение
-    slug = models.SlugField('Слаг', max_length=255, unique=True, null=True, blank=True)  # URL-friendly строка
-    created_at = models.DateTimeField('Дата создания', auto_now_add=True)  # Автоматическая дата создания
-    updated_at = models.DateTimeField('Дата обновления', auto_now=True)  # Автоматическая дата обновления
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES) 
+    title = models.CharField('Заголовок', max_length=30)  
+    text = RichTextUploadingField('Текст')  
+    url = models.URLField('URL', blank=True)  
+    image = models.ImageField('Изображение', upload_to='popular_images/') 
+    slug = models.SlugField('Слаг', max_length=255, unique=True, null=True, blank=True) 
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)  
+    updated_at = models.DateTimeField('Дата обновления', auto_now=True)  
 
     def save(self, *args, **kwargs):
-        if not self.slug:  # Генерация slug по title, если не указан
+        if not self.slug: 
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
@@ -26,7 +25,7 @@ class Popular(models.Model):
     class Meta:
         verbose_name = 'Популярное'
         verbose_name_plural = 'Популярные'
-        ordering = ['-created_at']  # Сортировка по убыванию даты создания
+        ordering = ['-created_at']  
 
 
 # Категория для недвижимости

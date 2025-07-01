@@ -14,7 +14,6 @@ class PopularAdmin(admin.ModelAdmin):
     icon_name = "🔥"
     list_display = ('slug', 'title', 'url', 'image_preview', 'created_at')
     search_fields = ('title', 'slug')
-    readonly_fields = ('image_preview',)
     def image_preview(self, obj): return image_preview(obj)
 
 
@@ -30,7 +29,6 @@ class RealEstateAdmin(admin.ModelAdmin):
     icon_name = "🏠"
     list_display = ('slug', 'category', 'image_preview', 'title', 'created_at')
     search_fields = ('title', 'slug')
-    readonly_fields = ('image_preview',)
     def image_preview(self, obj): return image_preview(obj)
 
 
@@ -46,7 +44,6 @@ class LuxuryHolidayAdmin(admin.ModelAdmin):
     icon_name = "🏖"
     list_display = ('slug', 'category', 'image_preview', 'title', 'created_at')
     search_fields = ('title', 'slug')
-    readonly_fields = ('image_preview',)
     def image_preview(self, obj): return image_preview(obj)
 
 
@@ -55,7 +52,6 @@ class InterviewAdmin(admin.ModelAdmin):
     icon_name = "🎤"
     list_display = ('title', 'author', 'studio', 'image_preview', 'created_at')
     search_fields = ('title', 'author')
-    readonly_fields = ('image_preview',)
     def image_preview(self, obj): return image_preview(obj)
 
 
@@ -64,7 +60,6 @@ class ProductAdmin(admin.ModelAdmin):
     icon_name = "📦"
     list_display = ('slug', 'title', 'image_preview', 'created_at')
     search_fields = ('title', 'slug')
-    readonly_fields = ('image_preview',)
     def image_preview(self, obj): return image_preview(obj)
 
 
@@ -74,7 +69,6 @@ class CompanyOfferAdmin(admin.ModelAdmin):
     list_display = ('title', 'url', 'is_active', 'image_preview', 'created_at')
     search_fields = ('title',)
     list_filter = ('is_active',)
-    readonly_fields = ('image_preview',)
     def image_preview(self, obj): return image_preview(obj)
 
 
@@ -83,7 +77,6 @@ class ArticleAdmin(admin.ModelAdmin):
     icon_name = "📰"
     list_display = ('slug', 'title', 'image_preview', 'created_at')
     search_fields = ('title', 'slug')
-    readonly_fields = ('image_preview',)
     def image_preview(self, obj): return image_preview(obj)
 
 
@@ -99,7 +92,6 @@ class AboutAdmin(admin.ModelAdmin):
     icon_name = "ℹ️"
     list_display = ('title', 'image_preview', 'created_at')
     search_fields = ('title',)
-    readonly_fields = ('image_preview',)
     def image_preview(self, obj): return image_preview(obj)
 
 
@@ -118,7 +110,6 @@ class AdvantageAdmin(admin.ModelAdmin):
     icon_name = "⭐"
     list_display = ('title', 'order', 'image_preview', 'created_at')
     search_fields = ('title',)
-    readonly_fields = ('image_preview',)
     def image_preview(self, obj): return image_preview(obj)
 
 
@@ -130,5 +121,4 @@ class ContactInfoAdmin(admin.ModelAdmin):
         'index', 'image_preview', 'created_at'
     )
     search_fields = ('address', 'journal_email')
-    readonly_fields = ('image_preview',)
     def image_preview(self, obj): return image_preview(obj)
