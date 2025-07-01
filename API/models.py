@@ -1,21 +1,22 @@
+# Импорт необходимых модулей
 from django.db import models
 from django.template.defaultfilters import slugify
 from ckeditor_uploader.fields import RichTextUploadingField
-from API.choices import LANGUAGE_CHOICES
+from API.choices import LANGUAGE_CHOICES  # Предполагается, что это список кортежей с языками
 
-
+# Модель для популярного контента
 class Popular(models.Model):
-    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
-    title = models.CharField('Заголовок', max_length=30)
-    text = RichTextUploadingField('Текст')
-    url = models.URLField('URL', blank=True)
-    image = models.ImageField('Изображение', upload_to='popular_images/')
-    slug = models.SlugField('Слаг', max_length=255, unique=True, null=True, blank=True)
-    created_at = models.DateTimeField('Дата создания', auto_now_add=True)
-    updated_at = models.DateTimeField('Дата обновления', auto_now=True)
+    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)  # Язык контента
+    title = models.CharField('Заголовок', max_length=30)  # Заголовок
+    text = RichTextUploadingField('Текст')  # Основной текст с CKEditor
+    url = models.URLField('URL', blank=True)  # Ссылка, необязательная
+    image = models.ImageField('Изображение', upload_to='popular_images/')  # Изображение
+    slug = models.SlugField('Слаг', max_length=255, unique=True, null=True, blank=True)  # URL-friendly строка
+    created_at = models.DateTimeField('Дата создания', auto_now_add=True)  # Автоматическая дата создания
+    updated_at = models.DateTimeField('Дата обновления', auto_now=True)  # Автоматическая дата обновления
 
     def save(self, *args, **kwargs):
-        if not self.slug:
+        if not self.slug:  # Генерация slug по title, если не указан
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
@@ -25,9 +26,10 @@ class Popular(models.Model):
     class Meta:
         verbose_name = 'Популярное'
         verbose_name_plural = 'Популярные'
-        ordering = ['-created_at']
+        ordering = ['-created_at']  # Сортировка по убыванию даты создания
 
 
+# Категория для недвижимости
 class CategoryRealEstate(models.Model):
     category = models.CharField('Категория', max_length=50)
     created_at = models.DateTimeField('Дата создания', auto_now_add=True)
@@ -41,6 +43,7 @@ class CategoryRealEstate(models.Model):
         ordering = ['-created_at']
 
 
+# Основная модель для недвижимости
 class RealEstate(models.Model):
     language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
     category = models.ForeignKey(CategoryRealEstate, on_delete=models.CASCADE, related_name='real_estates', verbose_name='Категория')
@@ -65,6 +68,7 @@ class RealEstate(models.Model):
         ordering = ['-created_at']
 
 
+# Категория для роскошного отдыха
 class CategoryLuxuryHoliday(models.Model):
     category = models.CharField('Категория', max_length=50)
     created_at = models.DateTimeField('Дата создания', auto_now_add=True)
@@ -78,6 +82,7 @@ class CategoryLuxuryHoliday(models.Model):
         ordering = ['-created_at']
 
 
+# Модель для роскошного отдыха
 class LuxuryHoliday(models.Model):
     language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
     category = models.ForeignKey(CategoryLuxuryHoliday, on_delete=models.CASCADE, related_name='luxury_holidays', verbose_name='Категория')
@@ -101,6 +106,7 @@ class LuxuryHoliday(models.Model):
         ordering = ['-created_at']
 
 
+# Интервью
 class Interview(models.Model):
     language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
     title = models.CharField('Заголовок', max_length=255)
@@ -119,6 +125,7 @@ class Interview(models.Model):
         ordering = ['-created_at']
 
 
+# Продукты
 class Product(models.Model):
     language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
     title = models.CharField('Заголовок', max_length=255)
@@ -142,6 +149,7 @@ class Product(models.Model):
         ordering = ['-created_at']
 
 
+# Предложения от компаний
 class CompanyOffer(models.Model):
     language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
     title = models.CharField('Заголовок', max_length=255)
@@ -160,6 +168,7 @@ class CompanyOffer(models.Model):
         ordering = ['-created_at']
 
 
+# Статьи
 class Article(models.Model):
     language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
     title = models.CharField('Заголовок', max_length=255)
@@ -183,6 +192,7 @@ class Article(models.Model):
         ordering = ['-created_at']
 
 
+# Отзывы
 class Review(models.Model):
     language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
     name = models.CharField('Имя', max_length=30)
@@ -198,6 +208,7 @@ class Review(models.Model):
         ordering = ['-created_at']
 
 
+# О нас (короткая информация)
 class About(models.Model):
     language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
     title = models.CharField('Заголовок', max_length=255)
@@ -213,6 +224,7 @@ class About(models.Model):
         ordering = ['-created_at']
 
 
+# О компании (более детально)
 class AboutCompany(models.Model):
     language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
     text = RichTextUploadingField('О Компании')
@@ -228,11 +240,12 @@ class AboutCompany(models.Model):
         ordering = ['-created_at']
 
 
+# Преимущества
 class Advantage(models.Model):
     language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
     title = models.CharField('Заголовок', max_length=255)
     icon = models.ImageField('Иконка', upload_to='advantage_icons/', blank=True, null=True)
-    order = models.PositiveIntegerField('Порядок', default=0)
+    order = models.PositiveIntegerField('Порядок', default=0)  # Используется для сортировки
     created_at = models.DateTimeField('Дата создания', auto_now_add=True)
 
     def __str__(self):
@@ -244,6 +257,7 @@ class Advantage(models.Model):
         ordering = ['order', '-created_at']
 
 
+# Контактная информация
 class ContactInfo(models.Model):
     language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
     address = models.CharField('Адрес', max_length=255)

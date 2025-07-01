@@ -44,7 +44,6 @@ urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')), 
     path('api/', include('API.urls')),  
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='redoc'),
 ]
 
 if settings.DEBUG:
