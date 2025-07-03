@@ -32,9 +32,6 @@ class UserRegistration(models.Model):
         return self.email
 
 
-
-
-
 # Модель для популярного контента
 class Popular(models.Model):
     language = models.CharField(('Язык'), max_length=10, choices=LANGUAGE_CHOICES) 
