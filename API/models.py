@@ -1,11 +1,43 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from ckeditor_uploader.fields import RichTextUploadingField
+from phonenumber_field.modelfields import PhoneNumberField
 from API.choices import LANGUAGE_CHOICES  
+
+
+#Регистрация Пользователя
+class UserRegistration(models.Model):
+    language = models.CharField(('Язык'), max_length=10, choices=LANGUAGE_CHOICES)
+    name = models.CharField(('Имя'), max_length=20)
+    firs_name = models.CharField(('Фамилия'), max_length=20)
+    phone = PhoneNumberField('Телефон')
+    email = models.EmailField('Email', unique=True)
+    password = models.CharField('Пароль', max_length=128)
+    slug = models.SlugField('URL', max_length=50, unique=True, blank=True)
+    created_at = models.DateTimeField('Создано', auto_now_add=True)
+    updated_at = models.DateTimeField('Обновлено', auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(f"{self.name}-{self.firs_name}")
+            slug = base_slug
+            num = 1
+            while UserRegistration.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{num}"
+                num += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.email
+
+
+
+
 
 # Модель для популярного контента
 class Popular(models.Model):
-    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES) 
+    language = models.CharField(('Язык'), max_length=10, choices=LANGUAGE_CHOICES) 
     title = models.CharField('Заголовок', max_length=30)  
     text = RichTextUploadingField('Текст')  
     url = models.URLField('URL', blank=True)  
@@ -44,7 +76,7 @@ class CategoryRealEstate(models.Model):
 
 # Основная модель для недвижимости
 class RealEstate(models.Model):
-    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    language = models.CharField(('Язык'), max_length=10, choices=LANGUAGE_CHOICES)
     category = models.ForeignKey(CategoryRealEstate, on_delete=models.CASCADE, related_name='real_estates', verbose_name='Категория')
     image = models.ImageField('Изображение', upload_to='real_estate_images/')
     title = models.CharField('Название', max_length=255)
@@ -107,7 +139,7 @@ class LuxuryHoliday(models.Model):
 
 # Интервью
 class Interview(models.Model):
-    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    language = models.CharField(('Язык'), max_length=10, choices=LANGUAGE_CHOICES)
     title = models.CharField('Заголовок', max_length=255)
     author = models.CharField('Автор', max_length=255)
     studio = models.CharField('Студия', max_length=255)
@@ -126,7 +158,7 @@ class Interview(models.Model):
 
 # Продукты
 class Product(models.Model):
-    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    language = models.CharField(('Язык'), max_length=10, choices=LANGUAGE_CHOICES)
     title = models.CharField('Заголовок', max_length=255)
     text = RichTextUploadingField('Текст')
     image = models.ImageField('Изображение', upload_to='product_images/')
@@ -150,7 +182,7 @@ class Product(models.Model):
 
 # Предложения от компаний
 class CompanyOffer(models.Model):
-    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    language = models.CharField(('Язык'), max_length=10, choices=LANGUAGE_CHOICES)
     title = models.CharField('Заголовок', max_length=255)
     image = models.ImageField('Изображение', upload_to='company_offer_images/')
     url = models.URLField('URL', blank=True, null=True)
@@ -169,7 +201,7 @@ class CompanyOffer(models.Model):
 
 # Статьи
 class Article(models.Model):
-    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    language = models.CharField(('Язык'), max_length=10, choices=LANGUAGE_CHOICES)
     title = models.CharField('Заголовок', max_length=255)
     text = RichTextUploadingField('Текст')
     image = models.ImageField('Изображение', upload_to='article_images/')
@@ -193,7 +225,7 @@ class Article(models.Model):
 
 # Отзывы
 class Review(models.Model):
-    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    language = models.CharField(('Язык'), max_length=10, choices=LANGUAGE_CHOICES)
     name = models.CharField('Имя', max_length=30)
     review = RichTextUploadingField('Отзыв')
     created_at = models.DateTimeField('Дата создания', auto_now_add=True)
@@ -209,7 +241,7 @@ class Review(models.Model):
 
 # О нас (короткая информация)
 class About(models.Model):
-    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    language = models.CharField(('Язык'), max_length=10, choices=LANGUAGE_CHOICES)
     title = models.CharField('Заголовок', max_length=255)
     image = models.ImageField('Изображение', upload_to='about_images/')
     created_at = models.DateTimeField('Дата создания', auto_now_add=True)
@@ -225,7 +257,7 @@ class About(models.Model):
 
 # О компании (более детально)
 class AboutCompany(models.Model):
-    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    language = models.CharField(('Язык'), max_length=10, choices=LANGUAGE_CHOICES)
     text = RichTextUploadingField('О Компании')
     image = models.ImageField('Изображение', upload_to='about_company_images/')
     created_at = models.DateTimeField('Дата создания', auto_now_add=True)
@@ -241,7 +273,7 @@ class AboutCompany(models.Model):
 
 # Преимущества
 class Advantage(models.Model):
-    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    language = models.CharField(('Язык'), max_length=10, choices=LANGUAGE_CHOICES)
     title = models.CharField('Заголовок', max_length=255)
     icon = models.ImageField('Иконка', upload_to='advantage_icons/', blank=True, null=True)
     order = models.PositiveIntegerField('Порядок', default=0)  # Используется для сортировки
@@ -258,7 +290,7 @@ class Advantage(models.Model):
 
 # Контактная информация
 class ContactInfo(models.Model):
-    language = models.CharField(max_length=10, choices=LANGUAGE_CHOICES)
+    language = models.CharField(('Язык'), max_length=10, choices=LANGUAGE_CHOICES)
     address = models.CharField('Адрес', max_length=255)
     work_time = models.CharField('Время работы', max_length=100)
     journal_email = models.EmailField('Email (Журнал)')

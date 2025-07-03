@@ -3,6 +3,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import *
 from .serializers import *
+from rest_framework import viewsets
+
+
+class UserRegistrationViewSet(viewsets.ModelViewSet):
+    queryset = UserRegistration.objects.all()
+    serializer_class = UserRegistrationSerializer
 
 
 # Популярное

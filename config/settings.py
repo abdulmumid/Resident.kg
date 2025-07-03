@@ -18,17 +18,20 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     'jazzmin',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
     'drf_yasg',
     'corsheaders',
     'ckeditor',
     'ckeditor_uploader',
+
     'API',
 ]
 
@@ -118,18 +121,19 @@ JAZZMIN_SETTINGS = {
     "show_sidebar": True,
     "navigation_expanded": True,
     "icons": {
+        "API.UserRegistration": "fas fa-man",
         "API.Popular": "fas fa-fire",
-        "API.Category_Real_Estate": "fas fa-home",
-        "API.Real_Estate": "fas fa-home",
-        "API.Category_Luxury_Holiday": "fas fa-umbrella-beach",
-        "API.Luxury_Holiday": "fas fa-umbrella-beach",
+        "API.CategoryRealEstate": "fas fa-home",
+        "API.RealEstate": "fas fa-home",
+        "API.CategoryLuxuryHoliday": "fas fa-umbrella-beach",
+        "API.LuxuryHoliday": "fas fa-umbrella-beach",
         "API.Interview": "fas fa-microphone",
         "API.Product": "fas fa-box",
         "API.CompanyOffer": "fas fa-tags",
         "API.Article": "fas fa-newspaper",
         "API.Review": "fas fa-comments",
         "API.About": "fas fa-info-circle",
-        "API.About_Company": "fas fa-building",
+        "API.AboutCompany": "fas fa-building",
         "API.Advantage": "fas fa-star",
         "API.ContactInfo": "fas fa-address-card",
     },

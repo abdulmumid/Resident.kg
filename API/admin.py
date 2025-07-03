@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 from .models import *
+from .forms import BasePhoneForm
 
 def image_preview(obj):
     if hasattr(obj, 'image') and obj.image:
@@ -9,9 +10,17 @@ def image_preview(obj):
 image_preview.short_description = 'Изображение'
 
 
+@admin.register(UserRegistration)
+class UserRegistrationAdmin(admin.ModelAdmin):
+    form = BasePhoneForm
+    icon_name = "person"  # вместо "man"
+    list_display = ('id', 'name', 'firs_name', 'email', 'phone')
+    search_fields = ('name', 'firs_name', 'email')
+
+
 @admin.register(Popular)
 class PopularAdmin(admin.ModelAdmin):
-    icon_name = "🔥"
+    icon_name = "whatshot"  # огонь
     list_display = ('slug', 'title', 'url', 'image_preview', 'created_at')
     search_fields = ('title', 'slug')
     def image_preview(self, obj): return image_preview(obj)
@@ -19,14 +28,14 @@ class PopularAdmin(admin.ModelAdmin):
 
 @admin.register(CategoryRealEstate)
 class CategoryRealEstateAdmin(admin.ModelAdmin):
-    icon_name = "🏠"
+    icon_name = "home"
     list_display = ('category', 'created_at')
     search_fields = ('category',)
 
 
 @admin.register(RealEstate)
 class RealEstateAdmin(admin.ModelAdmin):
-    icon_name = "🏠"
+    icon_name = "home"
     list_display = ('slug', 'category', 'image_preview', 'title', 'created_at')
     search_fields = ('title', 'slug')
     def image_preview(self, obj): return image_preview(obj)
@@ -34,14 +43,14 @@ class RealEstateAdmin(admin.ModelAdmin):
 
 @admin.register(CategoryLuxuryHoliday)
 class CategoryLuxuryHolidayAdmin(admin.ModelAdmin):
-    icon_name = "🏖"
+    icon_name = "beach_access"
     list_display = ('category', 'created_at')
     search_fields = ('category',)
 
 
 @admin.register(LuxuryHoliday)
 class LuxuryHolidayAdmin(admin.ModelAdmin):
-    icon_name = "🏖"
+    icon_name = "beach_access"
     list_display = ('slug', 'category', 'image_preview', 'title', 'created_at')
     search_fields = ('title', 'slug')
     def image_preview(self, obj): return image_preview(obj)
@@ -49,7 +58,7 @@ class LuxuryHolidayAdmin(admin.ModelAdmin):
 
 @admin.register(Interview)
 class InterviewAdmin(admin.ModelAdmin):
-    icon_name = "🎤"
+    icon_name = "mic"
     list_display = ('title', 'author', 'studio', 'image_preview', 'created_at')
     search_fields = ('title', 'author')
     def image_preview(self, obj): return image_preview(obj)
@@ -57,7 +66,7 @@ class InterviewAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    icon_name = "📦"
+    icon_name = "inventory_2"  # коробка
     list_display = ('slug', 'title', 'image_preview', 'created_at')
     search_fields = ('title', 'slug')
     def image_preview(self, obj): return image_preview(obj)
@@ -65,7 +74,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(CompanyOffer)
 class CompanyOfferAdmin(admin.ModelAdmin):
-    icon_name = "🏷"
+    icon_name = "label"
     list_display = ('title', 'url', 'is_active', 'image_preview', 'created_at')
     search_fields = ('title',)
     list_filter = ('is_active',)
@@ -74,7 +83,7 @@ class CompanyOfferAdmin(admin.ModelAdmin):
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    icon_name = "📰"
+    icon_name = "article"
     list_display = ('slug', 'title', 'image_preview', 'created_at')
     search_fields = ('title', 'slug')
     def image_preview(self, obj): return image_preview(obj)
@@ -82,14 +91,14 @@ class ArticleAdmin(admin.ModelAdmin):
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    icon_name = "💬"
+    icon_name = "chat_bubble"
     list_display = ('id', 'name', 'created_at')
     search_fields = ('name',)
 
 
 @admin.register(About)
 class AboutAdmin(admin.ModelAdmin):
-    icon_name = "ℹ️"
+    icon_name = "info"
     list_display = ('title', 'image_preview', 'created_at')
     search_fields = ('title',)
     def image_preview(self, obj): return image_preview(obj)
@@ -97,7 +106,7 @@ class AboutAdmin(admin.ModelAdmin):
 
 @admin.register(AboutCompany)
 class AboutCompanyAdmin(admin.ModelAdmin):
-    icon_name = "🏢"
+    icon_name = "apartment"
     list_display = ('id', 'created_at', 'short_text', 'image_preview')
     readonly_fields = ('image_preview',)
     def short_text(self, obj): return obj.text[:50] + '...'
@@ -107,7 +116,7 @@ class AboutCompanyAdmin(admin.ModelAdmin):
 
 @admin.register(Advantage)
 class AdvantageAdmin(admin.ModelAdmin):
-    icon_name = "⭐"
+    icon_name = "star"
     list_display = ('title', 'order', 'image_preview', 'created_at')
     search_fields = ('title',)
     def image_preview(self, obj): return image_preview(obj)
@@ -115,7 +124,7 @@ class AdvantageAdmin(admin.ModelAdmin):
 
 @admin.register(ContactInfo)
 class ContactInfoAdmin(admin.ModelAdmin):
-    icon_name = "📇"
+    icon_name = "contacts"
     list_display = (
         'id', 'address', 'work_time', 'journal_email',
         'index', 'image_preview', 'created_at'
