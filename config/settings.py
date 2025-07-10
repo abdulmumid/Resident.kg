@@ -27,6 +27,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'drf_yasg',
     'corsheaders',
     'ckeditor',
@@ -137,4 +139,11 @@ JAZZMIN_SETTINGS = {
         "API.Advantage": "fas fa-star",
         "API.ContactInfo": "fas fa-address-card",
     },
+}
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }

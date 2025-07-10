@@ -13,9 +13,9 @@ image_preview.short_description = 'Изображение'
 @admin.register(UserRegistration)
 class UserRegistrationAdmin(admin.ModelAdmin):
     form = BasePhoneForm
-    icon_name = "person"  # вместо "man"
-    list_display = ('id', 'name', 'firs_name', 'email', 'phone')
-    search_fields = ('name', 'firs_name', 'email')
+    icon_name = "person"  
+    list_display = ('id', 'name', 'email', 'phone', 'created_at', 'updated_at') 
+    search_fields = ('name', 'first_name', 'email')
 
 
 @admin.register(Popular)

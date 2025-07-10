@@ -7,12 +7,14 @@ django-jazzmin @ git+https://github.com/farridav/django-jazzmin.git@d269874c96fe
 django-js-asset==3.1.2
 django-phonenumber-field==8.1.0
 djangorestframework==3.16.0
+djangorestframework_simplejwt==5.5.0
 drf-yasg==1.21.10
 inflection==0.5.1
 packaging==25.0
 phonenumbers==9.0.8
 pillow==11.2.1
 psycopg==3.2.9
+PyJWT==2.9.0
 python-decouple==3.8
 pytz==2025.2
 PyYAML==6.0.2

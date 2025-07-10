@@ -3,33 +3,28 @@ from django.template.defaultfilters import slugify
 from ckeditor_uploader.fields import RichTextUploadingField
 from phonenumber_field.modelfields import PhoneNumberField
 from API.choices import LANGUAGE_CHOICES  
+from django.contrib.auth.hashers import make_password
 
 
-#Регистрация Пользователя
+
+# Регистрация Пользователя
 class UserRegistration(models.Model):
     language = models.CharField(('Язык'), max_length=10, choices=LANGUAGE_CHOICES)
-    name = models.CharField(('Имя'), max_length=20)
-    firs_name = models.CharField(('Фамилия'), max_length=20)
+    name = models.CharField(('ФИО'), max_length=20)
     phone = PhoneNumberField('Телефон')
     email = models.EmailField('Email', unique=True)
     password = models.CharField('Пароль', max_length=128)
-    slug = models.SlugField('URL', max_length=50, unique=True, blank=True)
     created_at = models.DateTimeField('Создано', auto_now_add=True)
     updated_at = models.DateTimeField('Обновлено', auto_now=True)
 
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            base_slug = slugify(f"{self.name}-{self.firs_name}")
-            slug = base_slug
-            num = 1
-            while UserRegistration.objects.filter(slug=slug).exists():
-                slug = f"{base_slug}-{num}"
-                num += 1
-            self.slug = slug
-        super().save(*args, **kwargs)
-
     def __str__(self):
         return self.email
+
+    def save(self, *args, **kwargs):
+        if not self.pk or not self.password.startswith('pbkdf2_'):
+            self.password = make_password(self.password)
+        super().save(*args, **kwargs)
+
 
 
 # Модель для популярного контента

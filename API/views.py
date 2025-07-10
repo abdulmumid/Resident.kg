@@ -1,14 +1,44 @@
+from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from django.contrib.auth.hashers import make_password
+from rest_framework_simplejwt.tokens import RefreshToken
+from datetime import timedelta
 from .models import *
 from .serializers import *
-from rest_framework import viewsets
 
 
 class UserRegistrationViewSet(viewsets.ModelViewSet):
     queryset = UserRegistration.objects.all()
     serializer_class = UserRegistrationSerializer
+
+    def perform_create(self, serializer):
+        password = serializer.validated_data.get('password')
+        serializer.save(password=make_password(password))
+
+    def perform_update(self, serializer):
+        password = serializer.validated_data.get('password')
+        if password:
+            serializer.save(password=make_password(password))
+        else:
+            serializer.save()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save(password=make_password(serializer.validated_data['password']))
+
+        refresh = RefreshToken.for_user(user)
+        access = refresh.access_token
+        access.set_exp(lifetime=timedelta(minutes=60))
+
+        data = {
+            'user': serializer.data,
+            'refresh': str(refresh),
+            'access': str(access),
+        }
+        headers = self.get_success_headers(serializer.data)
+        return Response(data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 # Популярное
