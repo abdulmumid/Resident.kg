@@ -123,7 +123,7 @@ JAZZMIN_SETTINGS = {
     "show_sidebar": True,
     "navigation_expanded": True,
     "icons": {
-        "API.UserRegistration": "fas fa-man",
+        "API.UserRegistration": "fas fa-person",
         "API.Popular": "fas fa-fire",
         "API.CategoryRealEstate": "fas fa-home",
         "API.RealEstate": "fas fa-home",
