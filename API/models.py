@@ -24,6 +24,11 @@ class UserRegistration(models.Model):
         if not self.pk or not self.password.startswith('pbkdf2_'):
             self.password = make_password(self.password)
         super().save(*args, **kwargs)
+        
+    class Meta:
+        verbose_name = 'Регистрация Пользователя'
+        verbose_name_plural = 'Регистрации Пользователей'
+        ordering = ['-id']
 
 
 
